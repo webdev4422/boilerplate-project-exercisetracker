@@ -16,9 +16,14 @@ const users = [] // empty array of objs
 let userId = 1 // user ID
 // Class template for creating objects
 class User {
-  constructor(_id, username) {
+  constructor(_id, username, count, log) {
     this._id = _id
     this.username = username
+    this.count = 0
+    // this.description = description
+    // this.duration = duration
+    // this.date = date
+    this.log = []
   }
 }
 
@@ -28,7 +33,6 @@ app.post('/api/users', (req, res) => {
   let _id = (userId++).toString()
   let username = req.body.username
   let userX = new User(_id, username)
-
   // Alternative: Create new users with unique ID using object literal syntax
   // const userX = {
   //   _id: (userId++).toString(),
@@ -48,14 +52,22 @@ app.get('/api/users', (req, res) => {
 
 // Add exercise params to user object {"_id":"1","username":"user1","date":"Wed Mar 22 2023","duration":10,"description":"test"}
 app.post('/api/users/:_id/exercises', (req, res) => {
-  // Find object by ID
-  let userX = users.find(({ _id }) => _id === Number(req.params._id))
-  // Add params
-  let description = req.body.description.toString()
-  let duration = Number(req.body.duration)
-  let date = new Date().toLocaleDateString('en-US')
-  userX.log.push({ description: description, duration: duration, date: date })
-  res.json({ _id: userX._id, username: username, description: description, duration: duration, date: date })
+  // Find object by request ID ":_id"
+  let userX = users.find(({ _id }) => _id === req.params._id)
+  // Push exercise changes into user object
+  userX.count += 1
+  userX.log.push({
+    description: req.body.description.toString(),
+    duration: Number(req.body.duration),
+    date: new Date().toLocaleDateString('en-US'),
+  })
+  res.json({
+    _id: userX._id,
+    username: userX.username,
+    description: userX.log[0].description,
+    duration: userX.log[0].duration,
+    date: userX.log[0].date,
+  })
 })
 
 // Return the user object with a log array of all the exercises added {"_id":"1","username":"user1","count":2,"log":[{"description":"test","duration":20,"date":"Wed Mar 22 2023"},{"description":"test","duration":20,"date":"Wed Mar 22 2023"}]}
