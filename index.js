@@ -14,20 +14,31 @@ app.get('/', (req, res) => {
 // Initialize variables
 const users = [] // empty array of objs
 let userId = 1 // user ID
+// Class template for creating objects
+class User {
+  constructor(_id, username) {
+    this._id = _id
+    this.username = username
+  }
+}
 
 // Create new user with random ID {"_id":"1","username":"user1"}
 app.post('/api/users', (req, res) => {
-  // Create new users with unique ID using object literal syntax
-  const newUser = {
-    _id: (userId++).toString(),
-    username: req.body.username,
-    count: 0,
-    log: [],
-  }
-  // Math.floor(Math.random() * (100 - 1 + 1)) + 1 // produce dupicates
-  // Date.now().toString() // valid alternative
-  users.push(newUser)
-  res.json({ _id: newUser._id, username: newUser.username })
+  // Create new users with class constructor instances
+  let _id = (userId++).toString()
+  let username = req.body.username
+  let userX = new User(_id, username)
+
+  // Alternative: Create new users with unique ID using object literal syntax
+  // const userX = {
+  //   _id: (userId++).toString(),
+  //   username: req.body.username,
+  //   count: 0,
+  //   log: [],
+  // }
+  // // Also: Date.now().toString() // valid alternative; // Math.floor(Math.random() * (100 - 1 + 1)) + 1 // produce dupicates
+  users.push(userX)
+  res.json({ _id: userX._id, username: userX.username })
 })
 
 // Get array of all users [{"_id":"1","username":"user1"}, {"_id":"2","username":"user2"}]
