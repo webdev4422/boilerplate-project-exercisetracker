@@ -11,16 +11,23 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/index.html')
 })
 
-// Create empty array of objects
-const users = []
+// Initialize variables
+const users = [] // empty array of objs
+let userId = 1 // user ID
 
 // Create new user with random ID {"_id":"1","username":"user1"}
 app.post('/api/users', (req, res) => {
-  newUserId = Math.floor(Math.random() * (1 - 1 + 1)) + 1
-  username = req.body.username
-  // Create object in array with params
-  users.push({ _id: newUserId, username: username, count: 0, log: [] })
-  res.json({ _id: newUserId, username: username })
+  // Create new users with unique ID using object literal syntax
+  const newUser = {
+    _id: (userId++).toString(),
+    username: req.body.username,
+    count: 0,
+    log: [],
+  }
+  // Math.floor(Math.random() * (100 - 1 + 1)) + 1 // produce dupicates
+  // Date.now().toString() // valid alternative
+  users.push(newUser)
+  res.json({ _id: newUser._id, username: newUser.username })
 })
 
 // Get array of all users [{"_id":"1","username":"user1"}, {"_id":"2","username":"user2"}]
