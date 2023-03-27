@@ -13,15 +13,14 @@ app.get('/', (req, res) => {
 
 // Create empty array of objects
 const users = []
-
+let _id = 0
 // Create new user with random ID {"_id":"1","username":"user1"}
 app.post('/api/users', (req, res) => {
-  let _id = 0
-  _id++
   username = req.body.username
   // Create object in array with params
   users.push({ _id: _id, username: username, count: 0, log: [] })
   res.json({ _id: _id, username: username })
+  _id++
 })
 
 // Get array of all users [{"_id":"1","username":"user1"}, {"_id":"2","username":"user2"}]
