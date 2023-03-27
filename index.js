@@ -54,9 +54,6 @@ app.get('/api/users', (req, res) => {
 app.post('/api/users/:_id/exercises', (req, res) => {
   // Find object by request ID ":_id"
   let userX = users.find(({ _id }) => _id === req.params._id)
-  // Count exercises
-  let counter = userX.count // default 0
-  userX.count += 1 // add 1 exercise
   // Check date
   let dateX = req.body.date
   if (dateX.match(/^\d{4}-\d{2}-\d{2}$/)) {
@@ -73,10 +70,11 @@ app.post('/api/users/:_id/exercises', (req, res) => {
   res.json({
     _id: userX._id,
     username: userX.username,
-    description: userX.log[counter].description,
-    duration: userX.log[counter].duration,
-    date: userX.log[counter].date,
+    description: userX.log[userX.count].description,
+    duration: userX.log[userX.count].duration,
+    date: userX.log[userX.count].date,
   })
+  userX.count++ // add +1 exercises
 })
 
 // Return the user object with a log array of all the exercises added {"_id":"1","username":"user1","count":2,"log":[{"description":"test","duration":20,"date":"Wed Mar 22 2023"},{"description":"test","duration":20,"date":"Wed Mar 22 2023"}]}
