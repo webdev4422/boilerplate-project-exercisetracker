@@ -35,7 +35,8 @@ app.post('/api/users/:_id/exercises', (req, res) => {
   // Add params
   let description = req.body.description.toString()
   let duration = Number(req.body.duration)
-  let date = new Date().toLocaleDateString('en-US')
+  // let date = req.body.date.match(/^\d{4}-\d{2}-\d{2}$/) ? new Date(req.body.date).toDateString() : new Date().toDateString()
+  let date = new Date().toDateString()
   userX.log.push({ description: description, duration: duration, date: date })
   res.json({ _id: userX._id, username: username, description: description, duration: duration, date: date })
 })
