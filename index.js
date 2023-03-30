@@ -30,42 +30,39 @@ class User {
 // Create new user with random ID {"_id":"1","username":"user1"}
 app.post('/api/users', (req, res) => {
   // Create new users with class constructor instances
-  let _id = (userId++).toString()
+  let _id = userId.toString()
   let username = req.body.username
   let userX = new User(_id, username)
   // Alternative: Create new users with unique ID using object literal syntax
   // const userX = {
-  //   _id: (userId++).toString(),
+  //   _id: (userId++).toString(), // Also: Date.now().toString() >>> valid alternative; // Math.floor(Math.random() * (100 - 1 + 1)) + 1 >>> produce dupicates
   //   username: req.body.username,
   //   count: 0,
   //   log: [],
   // }
-  // // Also: Date.now().toString() // valid alternative; // Math.floor(Math.random() * (100 - 1 + 1)) + 1 // produce dupicates
   users.push(userX)
   res.json({ _id: userX._id, username: userX.username })
+  userId++
 })
 
 // Get array of all users [{"_id":"1","username":"user1"}, {"_id":"2","username":"user2"}]
 app.get('/api/users', (req, res) => {
-  res.json(users)
+  let newArr = []
+  for (let i = 0; i < users.length; i++) {
+    newArr.push({ _id: users[i]._id, username: users[i].username })
+  }
+  res.json(newArr)
 })
 
 // Add exercise params to user object {"_id":"1","username":"user1","date":"Wed Mar 22 2023","duration":10,"description":"test"}
 app.post('/api/users/:_id/exercises', (req, res) => {
   // Find object by request ID ":_id"
   let userX = users.find(({ _id }) => _id === req.params._id)
-  // Check date
-  let dateX = req.body.date
-  if (dateX.match(/^\d{4}-\d{2}-\d{2}$/)) {
-    dateX = new Date(dateX).toDateString()
-  } else {
-    dateX = new Date().toDateString()
-  }
   // Push exercise changes into user object
   userX.log.push({
     description: req.body.description.toString(),
     duration: Number(req.body.duration),
-    date: dateX,
+    date: req.body.date.match(/^\d{4}-\d{2}-\d{2}$/) ? new Date(req.body.date).toDateString() : new Date().toDateString(),
   })
   res.json({
     _id: userX._id,
