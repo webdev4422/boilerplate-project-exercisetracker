@@ -51,7 +51,7 @@ app.post('/api/users/:_id/exercises', (req, res) => {
     description: req.body.description.toString(),
   })
   userX.count++
-  // Crafted response
+  // TODO: The response returned from POST /api/users/:_id/exercises will be the user object with the exercise fields added.
   res.json({
     _id: userX._id,
     username: userX.username,
