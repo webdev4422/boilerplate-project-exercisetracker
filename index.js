@@ -11,27 +11,37 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/index.html')
 })
 
-// Create empty array of objects
-const users = []
-let _id = 0
+// Initiate variables
+const users = [] // Create empty array of objects
+let _id = 1 // Set user ID
+
 // Create new user with random ID {"_id":"1","username":"user1"}
 app.post('/api/users', (req, res) => {
-  username = req.body.username
-  // Create object in array with params
-  users.push({ _id: _id, username: username, count: 0, log: [] })
-  res.json({ _id: _id, username: username })
+  // Create object literal with props
+  const userX = {
+    _id: _id.toString(),
+    username: req.body.username,
+    count: 0,
+    log: [],
+  }
+  users.push(userX) // Push to array
+  res.json({ _id: userX._id, username: userX.username }) // Response with json
   _id++
 })
 
 // Get array of all users [{"_id":"1","username":"user1"}, {"_id":"2","username":"user2"}]
 app.get('/api/users', (req, res) => {
-  res.json(users)
+  let arrX = []
+  for (let i = 0; i < users.length; i++) {
+    arrX.push({ _id: users[i]._id, username: users[i].username })
+  }
+  res.json(arrX)
 })
 
 // Add exercise params to user object {"_id":"1","username":"user1","date":"Wed Mar 22 2023","duration":10,"description":"test"}
 app.post('/api/users/:_id/exercises', (req, res) => {
   // Find object by ID
-  let userX = users.find(({ _id }) => _id === Number(req.params._id))
+  let userX = users.find(({ _id }) => _id === req.params._id)
   // Add params
   let description = req.body.description.toString()
   let duration = Number(req.body.duration)
@@ -39,12 +49,12 @@ app.post('/api/users/:_id/exercises', (req, res) => {
   let date = new Date().toDateString()
   userX.count++
   userX.log.push({ description: description, duration: duration, date: date })
-  res.json({ _id: userX._id, username: username, description: description, duration: duration, date: date })
+  res.json({ _id: userX._id, username: userX.username, description: description, duration: duration, date: date })
 })
 
 // Return the user object with a log array of all the exercises added {"_id":"1","username":"user1","count":2,"log":[{"description":"test","duration":20,"date":"Wed Mar 22 2023"},{"description":"test","duration":20,"date":"Wed Mar 22 2023"}]}
 app.get('/api/users/:_id/logs?', (req, res) => {
-  let userX = users.find(({ _id }) => _id === Number(req.params._id))
+  let userX = users.find(({ _id }) => _id === req.params._id)
   // let from = req.query.from
   // let to = req.query.to
   // let limit = Number(req.query.limit)
