@@ -43,13 +43,23 @@ app.post('/api/users/:_id/exercises', (req, res) => {
   // Find object by ID
   let userX = users.find(({ _id }) => _id === req.params._id)
   // Add params
-  let description = req.body.description.toString()
-  let duration = Number(req.body.duration)
-  // let date = req.body.date.match(/^\d{4}-\d{2}-\d{2}$/) ? new Date(req.body.date).toDateString() : new Date().toDateString()
-  let date = new Date().toDateString()
+  userX.log.push({
+    // NOT WORK! Ternary operator, if no date is supplied, the current date will be used.
+    // let date = req.body.date.match(/^\d{4}-\d{2}-\d{2}$/) ? new Date(req.body.date).toDateString() : new Date().toDateString()
+    date: new Date().toDateString(),
+    duration: Number(req.body.duration),
+    description: req.body.description.toString(),
+  })
   userX.count++
-  userX.log.push({ description: description, duration: duration, date: date })
-  res.json({ _id: userX._id, username: userX.username, description: description, duration: duration, date: date })
+  // Crafted response
+  res.json({
+    _id: userX._id,
+    username: userX.username,
+    date: userX.log[userX.count - 1].date,
+    duration: userX.log[userX.count - 1].duration,
+    description: userX.log[userX.count - 1].description,
+  })
+  // res.json(userX)
 })
 
 // Return the user object with a log array of all the exercises added {"_id":"1","username":"user1","count":2,"log":[{"description":"test","duration":20,"date":"Wed Mar 22 2023"},{"description":"test","duration":20,"date":"Wed Mar 22 2023"}]}
