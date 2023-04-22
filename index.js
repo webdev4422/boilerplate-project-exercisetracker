@@ -61,6 +61,10 @@ app.post('/api/users/:_id/exercises', (req, res) => {
   })
   // res.json(userX)
 })
+// Handle unmached routes
+app.use((req, res) => {
+  res.json('[object Object]')
+})
 
 // Return the user object with a log array of all the exercises added {"_id":"1","username":"user1","count":2,"log":[{"description":"test","duration":20,"date":"Wed Mar 22 2023"},{"description":"test","duration":20,"date":"Wed Mar 22 2023"}]}
 app.get('/api/users/:_id/logs?', (req, res) => {
