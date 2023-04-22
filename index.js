@@ -11,22 +11,22 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/index.html')
 })
 
-// Initiate variables
-const users = [] // Create empty array of objects
-let _id = 1 // Set user ID
+// Initialize variables
+const users = []
+let userID = 1
 
-// Create new user with random ID {"_id":"1","username":"user1"}
+// Create new user {"_id":"1","username":"user1"}
 app.post('/api/users', (req, res) => {
   // Create object literal with props
   const userX = {
-    _id: _id.toString(),
+    _id: userID.toString(),
     username: req.body.username,
     count: 0,
     log: [],
   }
-  users.push(userX) // Push to array
-  res.json({ _id: userX._id, username: userX.username }) // Response with json
-  _id++
+  users.push(userX)
+  res.json({ _id: userX._id, username: userX.username })
+  userID++
 })
 
 // Get array of all users [{"_id":"1","username":"user1"}, {"_id":"2","username":"user2"}]
@@ -40,9 +40,9 @@ app.get('/api/users', (req, res) => {
 
 // Add exercise params to user object {"_id":"1","username":"user1","date":"Wed Mar 22 2023","duration":10,"description":"test"}
 app.post('/api/users/:_id/exercises', (req, res) => {
-  // Find object by ID
+  // Find object by request ID ":_id"
   let userX = users.find(({ _id }) => _id === req.params._id)
-  // Add params
+  // Push exercise changes into user object
   userX.log.push({
     // NOT WORK! Ternary operator, if no date is supplied, the current date will be used.
     // let date = req.body.date.match(/^\d{4}-\d{2}-\d{2}$/) ? new Date(req.body.date).toDateString() : new Date().toDateString()
@@ -59,11 +59,10 @@ app.post('/api/users/:_id/exercises', (req, res) => {
     description: userX.log[userX.count].description,
   })
   userX.count++
-  // res.json(userX)
 })
 
 // Return the user object with a log array of all the exercises added {"_id":"1","username":"user1","count":2,"log":[{"description":"test","duration":20,"date":"Wed Mar 22 2023"},{"description":"test","duration":20,"date":"Wed Mar 22 2023"}]}
-app.get('/api/users/:_id/logs?', (req, res) => {
+app.get('/api/users/:_id/logs', (req, res) => {
   let userX = users.find(({ _id }) => _id === req.params._id)
   //   // let from = req.query.from
   //   // let to = req.query.to
@@ -91,21 +90,21 @@ app.get('/api/users/:_id/logs?', (req, res) => {
 // `)
 // })
 
-// Handle unmached routes
-app.use((req, res) => {
-  res.status(404)
-  res.send(`<!DOCTYPE html>
-<html lang="en">
-<hlead>
-<meta charset="utf-8">
-<title>Error</title>
-</head>
-<body>
-<pre>[object Object]</pre>
-</body>
-</html>
-`)
-})
+// // Handle unmached routes
+// app.use((req, res) => {
+//   res.status(404)
+//   res.send(`<!DOCTYPE html>
+// <html lang="en">
+// <hlead>
+// <meta charset="utf-8">
+// <title>Error</title>
+// </head>
+// <body>
+// <pre>[object Object]</pre>
+// </body>
+// </html>
+// `)
+// })
 
 // TODO
 // Add from, to and limit parameters to a GET /api/users/:_id/logs request to retrieve part of the log of any user. from and to are dates in yyyy-mm-dd format. limit is an integer of how many logs to send back.
