@@ -62,36 +62,50 @@ app.post('/api/users/:_id/exercises', (req, res) => {
   // res.json(userX)
 })
 
+// Return the user object with a log array of all the exercises added {"_id":"1","username":"user1","count":2,"log":[{"description":"test","duration":20,"date":"Wed Mar 22 2023"},{"description":"test","duration":20,"date":"Wed Mar 22 2023"}]}
+app.get('/api/users/:_id/logs?', (req, res) => {
+  let userX = users.find(({ _id }) => _id === req.params._id)
+  //   // let from = req.query.from
+  //   // let to = req.query.to
+  //   // let limit = Number(req.query.limit)
+  //   // if (limit > 0) {
+  //   // userX.count = limit
+  //   // userX.log = userX.log[0]
+  //   // }
+  res.json(userX)
+})
+
+// // Handle unmached routes
+// app.post('/api/users//exercises', (req, res) => {
+//   res.status(404)
+//   res.send(`<!DOCTYPE html>
+// <html lang="en">
+// <hlead>
+// <meta charset="utf-8">
+// <title>Error</title>
+// </head>
+// <body>
+// <pre>[object Object]</pre>
+// </body>
+// </html>
+// `)
+// })
+
 // Handle unmached routes
 app.use((req, res) => {
   res.status(404)
-  res.send(
-    `<!DOCTYPE html>
-    <html lang="en">
-    <head>
-    <meta charset="utf-8">
-    <title>Error</title>
-    </head>
-    <body>
-    <pre>[object Object]</pre>
-    </body>
-    </html>
-    `
-  )
+  res.send(`<!DOCTYPE html>
+<html lang="en">
+<hlead>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body>
+<pre>[object Object]</pre>
+</body>
+</html>
+`)
 })
-
-// Return the user object with a log array of all the exercises added {"_id":"1","username":"user1","count":2,"log":[{"description":"test","duration":20,"date":"Wed Mar 22 2023"},{"description":"test","duration":20,"date":"Wed Mar 22 2023"}]}
-// app.get('/api/users/:_id/logs?', (req, res) => {
-//   let userX = users.find(({ _id }) => _id === req.params._id)
-//   // let from = req.query.from
-//   // let to = req.query.to
-//   // let limit = Number(req.query.limit)
-//   // if (limit > 0) {
-//   // userX.count = limit
-//   // userX.log = userX.log[0]
-//   // }
-//   res.json(userX)
-// })
 
 // TODO
 // Add from, to and limit parameters to a GET /api/users/:_id/logs request to retrieve part of the log of any user. from and to are dates in yyyy-mm-dd format. limit is an integer of how many logs to send back.
