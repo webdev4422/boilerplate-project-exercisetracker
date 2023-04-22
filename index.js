@@ -50,15 +50,15 @@ app.post('/api/users/:_id/exercises', (req, res) => {
     duration: Number(req.body.duration),
     description: req.body.description.toString(),
   })
-  userX.count++
   // TODO: The response returned from POST /api/users/:_id/exercises will be the user object with the exercise fields added.
   res.json({
     _id: userX._id,
     username: userX.username,
-    date: userX.log[userX.count - 1].date,
-    duration: userX.log[userX.count - 1].duration,
-    description: userX.log[userX.count - 1].description,
+    date: userX.log[userX.count].date,
+    duration: userX.log[userX.count].duration,
+    description: userX.log[userX.count].description,
   })
+  userX.count++
   // res.json(userX)
 })
 
