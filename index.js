@@ -12,8 +12,9 @@ app.get('/', (req, res) => {
 })
 
 // Initialize variables
-const users = [] // empty array of objs
-let userId = 1 // user ID
+const users = []
+let userID = 1
+
 // Class template for creating objects
 class User {
   constructor(_id, username, count, log) {
@@ -27,31 +28,24 @@ class User {
   }
 }
 
-// Create new user with random ID {"_id":"1","username":"user1"}
+// Create new user {"_id":"1","username":"user1"}
 app.post('/api/users', (req, res) => {
   // Create new users with class constructor instances
-  let _id = userId.toString()
+  let _id = userID.toString()
   let username = req.body.username
   let userX = new User(_id, username)
-  // Alternative: Create new users with unique ID using object literal syntax
-  // const userX = {
-  //   _id: (userId++).toString(), // Also: Date.now().toString() >>> valid alternative; // Math.floor(Math.random() * (100 - 1 + 1)) + 1 >>> produce dupicates
-  //   username: req.body.username,
-  //   count: 0,
-  //   log: [],
-  // }
   users.push(userX)
   res.json({ _id: userX._id, username: userX.username })
-  userId++
+  userID++
 })
 
 // Get array of all users [{"_id":"1","username":"user1"}, {"_id":"2","username":"user2"}]
 app.get('/api/users', (req, res) => {
-  let newArr = []
+  let arrX = []
   for (let i = 0; i < users.length; i++) {
-    newArr.push({ _id: users[i]._id, username: users[i].username })
+    arrX.push({ _id: users[i]._id, username: users[i].username })
   }
-  res.json(newArr)
+  res.json(arrX)
 })
 
 // Add exercise params to user object {"_id":"1","username":"user1","date":"Wed Mar 22 2023","duration":10,"description":"test"}
@@ -60,18 +54,18 @@ app.post('/api/users/:_id/exercises', (req, res) => {
   let userX = users.find(({ _id }) => _id === req.params._id)
   // Push exercise changes into user object
   userX.log.push({
-    description: req.body.description.toString(),
-    duration: Number(req.body.duration),
     date: req.body.date.match(/^\d{4}-\d{2}-\d{2}$/) ? new Date(req.body.date).toDateString() : new Date().toDateString(),
+    duration: Number(req.body.duration),
+    description: req.body.description.toString(),
   })
   res.json({
     _id: userX._id,
     username: userX.username,
-    description: userX.log[userX.count].description,
-    duration: userX.log[userX.count].duration,
     date: userX.log[userX.count].date,
+    duration: userX.log[userX.count].duration,
+    description: userX.log[userX.count].description,
   })
-  userX.count++ // add +1 exercises
+  userX.count++
 })
 
 // Return the user object with a log array of all the exercises added {"_id":"1","username":"user1","count":2,"log":[{"description":"test","duration":20,"date":"Wed Mar 22 2023"},{"description":"test","duration":20,"date":"Wed Mar 22 2023"}]}
