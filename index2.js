@@ -18,7 +18,7 @@ let userID = 1
 // Create new user {"_id":"1","username":"user1"}
 app.post('/api/users', (req, res) => {
   // Create object literal with props
-  let userX = {
+  const userX = {
     _id: userID.toString(),
     username: req.body.username,
     count: 0,
