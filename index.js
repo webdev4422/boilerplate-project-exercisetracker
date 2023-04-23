@@ -75,16 +75,29 @@ app.post('/api/users/:_id/exercises', (req, res) => {
   userX.count++
 })
 
-// Return the user object with a log array of all the exercises added {"_id":"1","username":"user1","count":2,"log":[{"description":"test","duration":20,"date":"Wed Mar 22 2023"},{"description":"test","duration":20,"date":"Wed Mar 22 2023"}]}
+// Return the user object with a log array of all the exercises added {"_id":"1","username":"user1","from":"Sat Oct 10 2020","to":"Mon Apr 24 2023","count":2,"log":[{"description":"test","duration":20,"date":"Wed Mar 22 2023"},{"description":"test","duration":20,"date":"Wed Mar 22 2023"}]}
 // app.get('/api/users/:_id/logs', (req, res) => {
 app.get('/api/users/:_id/logs', (req, res) => {
   let userX = users.find(({ _id }) => _id === req.params._id)
-  // Add from, to and limit parameters to a GET /api/users/:_id/logs request to retrieve part of the log of any user. from and to are dates in yyyy-mm-dd format. limit is an integer of how many logs to send back.
-  // localhost:3000/api/users/1/logs?from=2020-10-10&to=2023-04-24&limit=2
-  console.log(req.query.from)
-  console.log(req.query.to)
-  console.log(req.query.limit)
-  res.json(userX)
+  let fromX = req.query.from // WIP
+  let toX = req.query.to // WIP
+  let limitX = Number(req.query.limit)
+  // Check if query parameters exists
+  if (limitX) {
+    let tempLogs = []
+    for (let i = 0; i < limitX; i++) {
+      tempLogs.push(userX.log[i])
+    }
+    tempLogs = tempLogs.filter((e) => e) // Filter null, undefined
+    res.json({
+      _id: userX._id,
+      username: userX.username,
+      count: tempLogs.length,
+      log: tempLogs,
+    })
+  } else {
+    res.json(userX)
+  }
 })
 
 // // Handle unmached routes
