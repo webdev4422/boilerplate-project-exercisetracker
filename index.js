@@ -89,8 +89,7 @@ app.get('/api/users/:_id/logs', (req, res) => {
     for (let i = 0; i < limitX; i++) {
       limitLogs.push(userX.log[i])
     }
-    limitLogs = limitLogs.filter((e) => e) // Filter null, undefined
-    newLogs = limitLogs
+    newLogs = limitLogs.filter((e) => e) // Filter null, undefined
   }
   console.log(newLogs)
   res.json({
