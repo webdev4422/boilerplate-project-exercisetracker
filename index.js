@@ -83,30 +83,24 @@ app.get('/api/users/:_id/logs', (req, res) => {
   let toX = req.query.to
   let limitX = Number(req.query.limit)
   // Check if query parameters exists, must be limitX, because response object differ
-  if (limitX || (limitX && fromX) || (limitX && toX)) {
-    let tempLogs = []
+  let newLogs = userX.log
+  if (limitX) {
+    let limitLogs = []
     for (let i = 0; i < limitX; i++) {
-      tempLogs.push(userX.log[i])
+      limitLogs.push(userX.log[i])
     }
-    tempLogs = tempLogs.filter((e) => e) // Filter null, undefined
-    res.json({
-      _id: userX._id,
-      username: userX.username,
-      from: fromX,
-      to: toX,
-      count: tempLogs.length,
-      log: tempLogs,
-    })
-  } else {
-    res.json({
-      _id: userX._id,
-      username: userX.username,
-      from: fromX,
-      to: toX,
-      count: userX.count,
-      log: userX.log,
-    })
+    limitLogs = limitLogs.filter((e) => e) // Filter null, undefined
+    newLogs = limitLogs
   }
+  console.log(newLogs)
+  res.json({
+    _id: userX._id,
+    username: userX.username,
+    from: fromX,
+    to: toX,
+    count: newLogs.length,
+    log: newLogs,
+  })
 })
 
 // // Handle unmached routes
