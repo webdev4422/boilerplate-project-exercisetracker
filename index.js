@@ -79,11 +79,11 @@ app.post('/api/users/:_id/exercises', (req, res) => {
 // app.get('/api/users/:_id/logs', (req, res) => {
 app.get('/api/users/:_id/logs', (req, res) => {
   let userX = users.find(({ _id }) => _id === req.params._id)
-  let fromX = req.query.from // WIP
-  let toX = req.query.to // WIP
+  let fromX = req.query.from
+  let toX = req.query.to
   let limitX = Number(req.query.limit)
-  // Check if query parameters exists
-  if (limitX) {
+  // Check if query parameters exists, must be limitX, because response object differ
+  if (limitX || (limitX && fromX) || (limitX && toX)) {
     let tempLogs = []
     for (let i = 0; i < limitX; i++) {
       tempLogs.push(userX.log[i])
@@ -92,11 +92,20 @@ app.get('/api/users/:_id/logs', (req, res) => {
     res.json({
       _id: userX._id,
       username: userX.username,
+      from: fromX,
+      to: toX,
       count: tempLogs.length,
       log: tempLogs,
     })
   } else {
-    res.json(userX)
+    res.json({
+      _id: userX._id,
+      username: userX.username,
+      from: fromX,
+      to: toX,
+      count: userX.count,
+      log: userX.log,
+    })
   }
 })
 
