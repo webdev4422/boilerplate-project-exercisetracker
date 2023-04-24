@@ -60,7 +60,7 @@ app.post('/api/users/:_id/exercises', (req, res) => {
   // Push exercise changes into user object
   userX.log.push({
     // NOT WORK! Ternary operator, if no date is supplied, the current date will be used.
-    // let date = req.body.date.match(/^\d{4}-\d{2}-\d{2}$/) ? new Date(req.body.date).toDateString() : new Date().toDateString()
+    // date: req.body.date.match(/^\d{4}-\d{2}-\d{2}$/) ? new Date(req.body.date).toDateString() : new Date().toDateString(),
     date: new Date().toDateString(),
     duration: Number(req.body.duration),
     description: req.body.description.toString(),
@@ -91,7 +91,6 @@ app.get('/api/users/:_id/logs', (req, res) => {
     }
     newLogs = limitLogs.filter((e) => e) // Filter null, undefined
   }
-  console.log(newLogs)
   res.json({
     _id: userX._id,
     username: userX.username,
