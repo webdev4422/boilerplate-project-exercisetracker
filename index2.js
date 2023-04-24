@@ -15,25 +15,29 @@ app.get('/', (req, res) => {
 const users = []
 let userID = 1
 
-// Class template for creating objects
-class User {
-  constructor(_id, username, count, log) {
-    this._id = _id
-    this.username = username
-    this.count = 0
-    // this.description = description
-    // this.duration = duration
-    // this.date = date
-    this.log = []
-  }
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Create new user {"_id":"1","username":"user1"}
 app.post('/api/users', (req, res) => {
-  // Create new users with class constructor instances
-  let _id = userID.toString()
-  let username = req.body.username
-  let userX = new User(_id, username)
+  // Create object literal with props
+  let userX = {
+    _id: userID.toString(),
+    username: req.body.username,
+    count: 0,
+    log: [],
+  }
   users.push(userX)
   res.json({ _id: userX._id, username: userX.username })
   userID++
@@ -54,7 +58,7 @@ app.post('/api/users/:_id/exercises', (req, res) => {
   let userX = users.find(({ _id }) => _id === req.params._id)
   // Push exercise changes into user object
   userX.log.push({
-    date: req.body.date.match(/^\d{4}-\d{2}-\d{2}$/) ? new Date(req.body.date).toDateString() : new Date().toDateString(),
+    date: new Date().toDateString(),
     duration: Number(req.body.duration),
     description: req.body.description.toString(),
   })
@@ -68,7 +72,8 @@ app.post('/api/users/:_id/exercises', (req, res) => {
   userX.count++
 })
 
-// Return the user object with a log array of all the exercises added {"_id":"1","username":"user1","count":2,"log":[{"description":"test","duration":20,"date":"Wed Mar 22 2023"},{"description":"test","duration":20,"date":"Wed Mar 22 2023"}]}
+// Return the user object with a log array of all the exercises added {"_id":"1","username":"user1","from":"Sat Oct 10 2020","to":"Mon Apr 24 2023","count":2,"log":[{"description":"test","duration":20,"date":"Wed Mar 22 2023"},{"description":"test","duration":20,"date":"Wed Mar 22 2023"}]}
+// app.get('/api/users/:_id/logs', (req, res) => {
 app.get('/api/users/:_id/logs', (req, res) => {
   let userX = users.find(({ _id }) => _id === req.params._id)
   let fromX = req.query.from
