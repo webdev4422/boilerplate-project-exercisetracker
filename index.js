@@ -83,7 +83,6 @@ app.get('/api/users/:_id/logs', (req, res) => {
     }
     newLogs = limitLogs.filter((e) => e) // Filter null, undefined
   }
-  console.log(newLogs)
   res.json({
     _id: userX._id,
     username: userX.username,
