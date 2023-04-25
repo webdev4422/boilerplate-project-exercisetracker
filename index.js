@@ -83,25 +83,26 @@ app.post('/api/users/:_id/exercises', (req, res) => {
 // app.get('/api/users/:_id/logs', (req, res) => {
 app.get('/api/users/:_id/logs', (req, res) => {
   let userX = users.find(({ _id }) => _id === req.params._id)
-  let fromX = req.query.from
-  let toX = req.query.to
+  let fromX = req.query.from // NOT WORK
+  let toX = req.query.to // NOT WORK
   let limitX = Number(req.query.limit)
   // Check if query parameters exists, must be limitX, because response object differ
-  let newLogs = userX.log
+  let logX = userX.log
   if (limitX) {
+    // If limitX is true, response with this logs quantity
     let limitLogs = []
     for (let i = 0; i < limitX; i++) {
       limitLogs.push(userX.log[i])
     }
-    newLogs = limitLogs.filter((e) => e) // Filter null, undefined
+    logX = limitLogs.filter((e) => e) // Filter null, undefined
   }
   res.json({
     _id: userX._id,
     username: userX.username,
     from: fromX,
     to: toX,
-    count: newLogs.length,
-    log: newLogs,
+    count: logX.length,
+    log: logX,
   })
 })
 
