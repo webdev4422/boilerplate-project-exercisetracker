@@ -57,9 +57,15 @@ app.get('/api/users', (req, res) => {
 app.post('/api/users/:_id/exercises', (req, res) => {
   // Find object by request ID ":_id"
   let userX = users.find(({ _id }) => _id === req.params._id)
+  // Use the dateString format of the Date API.
+  let dateX = new Date(req.body.date).toDateString()
+  // Check if date is valid
+  if (dateX === 'undefined' || dateX === 'Invalid Date') {
+    dateX = new Date().toDateString()
+  }
   // Push exercise changes into user object
   userX.log.push({
-    date: new Date(req.body.date).toDateString() === 'undefined' ? new Date().toDateString() : new Date(req.body.date).toDateString(),
+    date: dateX,
     duration: Number(req.body.duration),
     description: req.body.description.toString(),
   })
