@@ -54,7 +54,7 @@ app.post('/api/users/:_id/exercises', (req, res) => {
   let userX = users.find(({ _id }) => _id === req.params._id)
   // Push exercise changes into user object
   userX.log.push({
-    date: req.body.date.match(/^\d{4}-\d{2}-\d{2}$/) ? new Date(req.body.date).toDateString() : new Date().toDateString(),
+    date: new Date(req.body.date).toDateString() === 'undefined' ? new Date().toDateString() : new Date(req.body.date).toDateString(),
     duration: Number(req.body.duration),
     description: req.body.description.toString(),
   })
