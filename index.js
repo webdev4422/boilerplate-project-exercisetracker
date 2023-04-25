@@ -21,9 +21,6 @@ class User {
     this._id = _id
     this.username = username
     this.count = 0
-    // this.description = description
-    // this.duration = duration
-    // this.date = date
     this.log = []
   }
 }
@@ -52,9 +49,15 @@ app.get('/api/users', (req, res) => {
 app.post('/api/users/:_id/exercises', (req, res) => {
   // Find object by request ID ":_id"
   let userX = users.find(({ _id }) => _id === req.params._id)
+  // Use the dateString format of the Date API.
+  let dateX = new Date(req.body.date).toDateString()
+  // Check if date is valid
+  if (dateX === 'undefined' || dateX === 'Invalid Date') {
+    dateX = new Date().toDateString()
+  }
   // Push exercise changes into user object
   userX.log.push({
-    date: new Date(req.body.date).toDateString() === 'undefined' ? new Date().toDateString() : new Date(req.body.date).toDateString(),
+    date: dateX,
     duration: Number(req.body.duration),
     description: req.body.description.toString(),
   })
@@ -71,25 +74,26 @@ app.post('/api/users/:_id/exercises', (req, res) => {
 // Return the user object with a log array of all the exercises added {"_id":"1","username":"user1","count":2,"log":[{"description":"test","duration":20,"date":"Wed Mar 22 2023"},{"description":"test","duration":20,"date":"Wed Mar 22 2023"}]}
 app.get('/api/users/:_id/logs', (req, res) => {
   let userX = users.find(({ _id }) => _id === req.params._id)
-  let fromX = req.query.from
-  let toX = req.query.to
+  let fromX = req.query.from // NOT WORK
+  let toX = req.query.to // NOT WORK
   let limitX = Number(req.query.limit)
   // Check if query parameters exists, must be limitX, because response object differ
-  let newLogs = userX.log
+  let logX = userX.log
   if (limitX) {
+    // If limitX is true, response with this logs quantity
     let limitLogs = []
     for (let i = 0; i < limitX; i++) {
       limitLogs.push(userX.log[i])
     }
-    newLogs = limitLogs.filter((e) => e) // Filter null, undefined
+    logX = limitLogs.filter((e) => e) // Filter null, undefined
   }
   res.json({
     _id: userX._id,
     username: userX.username,
     from: fromX,
     to: toX,
-    count: newLogs.length,
-    log: newLogs,
+    count: logX.length,
+    log: logX,
   })
 })
 
