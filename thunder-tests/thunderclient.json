@@ -1,0 +1,136 @@
+[
+  {
+    "_id": "8b8ce5ce-d674-47b4-bf85-1436fc9be159",
+    "colId": "46f2db4e-c925-45ae-8d4c-b5094fdebfcd",
+    "containerId": "",
+    "name": "/api/users",
+    "url": "localhost:3000/api/users",
+    "method": "POST",
+    "sortNum": 10000,
+    "created": "2023-04-25T10:02:43.787Z",
+    "modified": "2023-04-25T10:02:43.787Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "formencoded",
+      "raw": "",
+      "form": [
+        {
+          "name": "username",
+          "value": "user1"
+        }
+      ]
+    },
+    "tests": []
+  },
+  {
+    "_id": "6612286f-aa9f-4c78-aa12-32335ed1a540",
+    "colId": "46f2db4e-c925-45ae-8d4c-b5094fdebfcd",
+    "containerId": "",
+    "name": "/api/users",
+    "url": "localhost:3000/api/users",
+    "method": "GET",
+    "sortNum": 20000,
+    "created": "2023-04-25T10:02:43.788Z",
+    "modified": "2023-04-25T10:03:05.269Z",
+    "headers": [],
+    "params": [],
+    "tests": []
+  },
+  {
+    "_id": "87f51da4-3132-4c50-821e-447b8995e5f4",
+    "colId": "46f2db4e-c925-45ae-8d4c-b5094fdebfcd",
+    "containerId": "",
+    "name": "/api/users/1/exercises",
+    "url": "localhost:3000/api/users/1/exercises",
+    "method": "POST",
+    "sortNum": 30000,
+    "created": "2023-04-25T10:02:43.789Z",
+    "modified": "2023-04-25T10:02:43.789Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "formencoded",
+      "raw": "",
+      "form": [
+        {
+          "name": "description",
+          "value": "test 10"
+        },
+        {
+          "name": "duration",
+          "value": "10"
+        },
+        {
+          "name": "date",
+          "value": "2022-10-10"
+        }
+      ]
+    },
+    "tests": [],
+    "preReq": {
+      "runRequests": [
+        {
+          "reqId": "f3002ccb-cfe9-4d95-bb98-32a568f1dcc7",
+          "colId": "history",
+          "triggerCondition": "run-always",
+          "triggerValue": ""
+        }
+      ]
+    }
+  },
+  {
+    "_id": "3d15eab2-af9c-4483-90bc-f8ee22b199e0",
+    "colId": "46f2db4e-c925-45ae-8d4c-b5094fdebfcd",
+    "containerId": "",
+    "name": "/api/users/1/logs",
+    "url": "localhost:3000/api/users/1/logs",
+    "method": "GET",
+    "sortNum": 40000,
+    "created": "2023-04-25T10:02:43.790Z",
+    "modified": "2023-04-25T10:02:43.790Z",
+    "headers": [],
+    "params": [],
+    "tests": [],
+    "preReq": {
+      "runRequests": [
+        {
+          "reqId": "8a687d93-b52d-47e7-b685-8539acca54ff",
+          "colId": "history",
+          "triggerCondition": "run-always",
+          "triggerValue": ""
+        }
+      ]
+    }
+  },
+  {
+    "_id": "9a8034bd-0372-4ee6-859d-5c1edae83452",
+    "colId": "46f2db4e-c925-45ae-8d4c-b5094fdebfcd",
+    "containerId": "",
+    "name": "/api/users/1/logs?2020-10-10&2023-04-23&2",
+    "url": "localhost:3000/api/users/1/logs?from=2020-10-10&to=2023-04-24&limit=2",
+    "method": "GET",
+    "sortNum": 50000,
+    "created": "2023-04-25T10:02:43.791Z",
+    "modified": "2023-04-25T10:03:13.392Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "from",
+        "value": "2020-10-10",
+        "isPath": false
+      },
+      {
+        "name": "to",
+        "value": "2023-04-24",
+        "isPath": false
+      },
+      {
+        "name": "limit",
+        "value": "2",
+        "isPath": false
+      }
+    ],
+    "tests": []
+  }
+]
